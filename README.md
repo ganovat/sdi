@@ -8,7 +8,7 @@ on a VM
 
 # Configuration
 
-## Acounts:
+## Accounts:
 The server consists of 4 accounts audit marketing and design
 
 Marketing is only allowed to upload file to its home directory and the website using SFTP, it is part
@@ -28,13 +28,14 @@ webdata- Is in place to allow the audit account and nginx to read the contents o
 
 sftpMember- Has accounts that are only granted SFTP and no shell access
 
-readHome-
+readHome- Is a dedicated group for audit to use to get read access to marketing and design's files
 
 Directory permissions:
 For the directories /srv/www, /home/design, and /home/marketing: the chmod 2750 command was used here to ensure that every new file created in these directories inherit the directory's group, this for example will allow the audit account as well as nginx to read anything uploaded, as well
 
 
-For /home/audit the chmod  750 command was used here to
+For /home/audit the chmod  750 command was used here to make it so that only the owner(audit) and the users in the same group access it
 
 
 # Maintenance tasks
+
