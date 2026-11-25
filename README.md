@@ -10,10 +10,10 @@ on a VM
 
 - nologin was used for marketing and design hence they require SSH key login only without passwords
  
--marketing  is only allowed to upload file to its home directory and the website using SFTP, it is part
+- marketing  is only allowed to upload file to its home directory and the website using SFTP, it is part
 of the group sftpMember and its own group. It has read and write access to /srv/www as it owns it.
 
--design is allowed shell access for server side commands, and to upload files to their home directory, but not the website. Design belongs to its own group
+- design is allowed shell access for server side commands, and to upload files to their home directory, but not the website. Design belongs to its own group
 
 -audit has read-only SFTP access to marketing and design's accounts, the account is a part of the groups webdata, sftpMember, readHome and
 its own group
@@ -24,11 +24,11 @@ its own group
 ## Groups
 Groups are in place to assist with access control
 
-webdata- allows the audit account and nginx to read the contents of /srv/www. control the read access of /srv/www
+-nwebdata- allows the audit account and nginx to read the contents of /srv/www. control the read access of /srv/www
 
-sftpMember- Has accounts that are granted SFTP-only and no shell access
+- sftpMember- Has accounts that are granted SFTP-only and no shell access
 
-readHome- Dedicated group for audit to use to get read access to marketing and design's files as the home directories of marketing and design are group owned by it
+- readHome- Dedicated group for audit to use to get read access to marketing and design's files as the home directories of marketing and design are group owned by it
 
 ## Directory permissions:
 - For the directories /srv/www, /home/design, and /home/marketing: the chmod 2750 command was used. The Setgid ensures every new file created in these directories inherit the directory's group.
@@ -60,4 +60,11 @@ For /home/audit the chmod  750 command was used here to make it so that only the
 - sudo apt update must be done to prepare for an update, followed by sudo apt upgrade to install available upgrades
 - For disk space management make use of df -h, and sudo docker image prune to remove dangling images
 - For logs: use journalctl -u nginx, look into /var/log/nginx /var/log/auth.log, and use sudo docker logs sdi-container
+- Before restarting a service test the configuration file with sudo nginx -t and sudo sshdm Keep a second SSH session open to make potential fixes
+- To update the application when the repo changes: 1. git pull, 2. sudo docker build -t sdi-img, 3. sudo docker rm -f sdi-container. Then run it using the same policy and fixed IP
+- For a new user: use useradd. create /.ssh/authorized_keys, use either chmod 600/700, generate a key and paste contents into authorized_keys
+- Status check: sudo ufw status must always show Status: active, systemctl status nginx docker ssh must show all 3 services as running
 
+
+# AI use
+AI was used to explain error messages 
