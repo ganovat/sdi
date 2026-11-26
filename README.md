@@ -52,7 +52,7 @@ Documentation of installation and configuration of a server hosted on a VM
 - Docker installed from apt repository
 - SDI docker repository cloned, built and named sdi-img
 - The container sdi-container runs on a user defined bridge sdi-network 172.24.0.0/24 at a fixed IP 172.24.0.8 with restart policy --restart unless-stopped (automatically starts container). Fixed IP lets Nginx know where to forwards a request every time.
-- Ports not published (p 3000:3000) so UFW cannot be bypassed. 
+- Ports not published (-p 3000:3000) so UFW cannot be bypassed. 
 - Nginx proxies docker.stu-908136-vm1.net.dcs.hull.ac.uk to 172.24.0.8:3000
 
   
@@ -62,7 +62,7 @@ Documentation of installation and configuration of a server hosted on a VM
 - Logs: use journalctl -u nginx, look into /var/log/nginx /var/log/auth.log, and use sudo docker logs sdi-container
 - Before restarting a service test run sudo nginx -t and sudo sshd -t Keep a second SSH session open to make potential fixes
 - Update application: 1. git pull, 2. sudo docker build -t sdi-img . , 3. sudo docker rm -f sdi-container. Then run it using the same restart policy, fixed IP, and network
-- New user: use useradd. Create ~/.ssh (chmod 700) and ~/.ssh/authorized_keys (chmod 600), , generate a key and paste contents into authorized_keys and add to group.
+- New user: use useradd. Create ~/.ssh (chmod 700) and ~/.ssh/authorized_keys (chmod 600), , generate keys and paste public key into authorized_keys, private keys in local machine and add to group.
 - Status check: sudo ufw status must always show Status: active, systemctl status nginx docker ssh must show all 3 services as running
 
 
