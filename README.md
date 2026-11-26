@@ -10,7 +10,7 @@ Documentation of installation and configuration of a server hosted on a VM
 ## Accounts:
 - sysadmin account and home deleted, and ubuntu password changed
   
-- nologin for marketing and audit. bash for design. SSH key login only without passwords for all
+- nologin for marketing and audit. bash for design. SSH key login only without passwords for all 3
  
 - marketing: SFTP read/write to its home directory and /srv/www.
 
@@ -22,16 +22,16 @@ Documentation of installation and configuration of a server hosted on a VM
 
 
 ## Groups
-- webdata: has audit, www-data . reads /srv/www
+- webdata: has audit and www-data . reads /srv/www
 
 - sftpMember: has audit and marketing. Forced into SFTP-only
 
-- readHome- is the group owner of marketing and design home directories so it can read them. Enforces least privilege principle and allows scalability without changing home ownership
+- readHome- group owner of marketing and design home directories so it can read them. Enforces least privilege principle and allows scalability without changing home ownership
 
 ## Directories & permissions:
-- For the directories /srv/www, /home/design, and /home/marketing: the chmod 2750 command was used. The Setgid ensures every new file inherits the directory's group allowing audit and Nginx to read files.
+- /srv/www, /home/design, and /home/marketing: the chmod 2750 command was used. The Setgid ensures every new file inherits the directory's group allowing audit and Nginx to read files.
 
-- For /home/audit the chmod  750 command was used here to make it so that only the owner(audit) and the users in the same group access it
+- /home/audit: the chmod  750 command used so only the owner(audit) and the users in the same group access it
 
 ## Firewall
 - UFW is enabled and only 22/tcp and 80/tcp are allowed through the firewall
