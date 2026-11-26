@@ -1,4 +1,4 @@
-# Secure Digital Infrastructure 661982
+# SDI 661982
 
 ## Student: 908136
 Documentation of installation and configuration of a server hosted on a VM
@@ -6,35 +6,35 @@ Documentation of installation and configuration of a server hosted on a VM
 
 # Configuration
 
-- The web server's root directory is /srv/www
+- web server root directory: /srv/www
 ## Accounts:
 - sysadmin account and home deleted, and ubuntu password changed
   
-- nologin for marketing and audit. bash for design. SSH key login only without passwords for all 3
+- nologin for marketing and audit. bash for design. SSH key login only without passwords for all 3. No guessable passwords
  
-- marketing: SFTP read/write to its home directory and /srv/www.
+- marketing: SFTP read/write to its home directory and /srv/www. Allows site publishing
 
-- design: shell access and SFTP to home directory, but not the website. Directories project_rocket/cad/render/ and project_cheese/research/tests/ created in root
+- design: shell access and SFTP to home directory, but not the website. Directories project_rocket/cad/render/ and project_cheese/research/tests/ created in root.
 
-- audit: read-only SFTP access to marketing and design homes and website
+- audit: read-only SFTP access to marketing and design homes and website.
   
-- www-data is a system user which is created by nginx which is part of the group webdata
+- www-data: system user created by Nginx, part of the group webdata.
 
 
 ## Groups
-- webdata: has audit and www-data . reads /srv/www
+- webdata (audit, www-data ): reads /srv/www
 
-- sftpMember: has audit and marketing. Forced into SFTP-only
+- sftpMember (audit and marketing): Forced into SFTP-only
 
-- readHome- group owner of marketing and design home directories so it can read them. Enforces least privilege principle and allows scalability without changing home ownership
+- readHome (audit)- group owner of marketing and design home directories so it can read them. Enforces least privilege principle and allows scalability without changing home ownership
 
 ## Directories & permissions:
-- /srv/www, /home/design, and /home/marketing: the chmod 2750 command was used. The Setgid ensures every new file inherits the directory's group allowing audit and Nginx to read files.
+- /srv/www, /home/design, and /home/marketing: chmod 2750 used. The Setgid ensures every new file inherits the directory's group allowing audit and Nginx to read files.
 
-- /home/audit: the chmod  750 command used so only the owner(audit) and the users in the same group access it
+- /home/audit: chmod  750 used, only the owner(audit) and the users in the same group access it
 
 ## Firewall
-- UFW is enabled and only 22/tcp and 80/tcp are allowed through the firewall
+- UFW is enabled and only 22/tcp and 80/tcp are allowed through the firewall (VM security measure)
 
 ## SFTP
 - In SSH configuration file Match Group sftpMember applies ForceCommand internal-sftp. Users in this group have no shell access.
@@ -44,19 +44,19 @@ Documentation of installation and configuration of a server hosted on a VM
 - Nginx listens on port 80
 - root directory set to /srv/www
 - The Nginx configuration file at /etc/nginx/sites-available/staticSite and it is symlinked into /etc/nginx/sites-enabled/staticSite
-- sites-available and Symlinks used instead of writing to sites-enabled as it allows for easy disabling and re-enabling a site without deletion
+- sites-available and Symlinks used instead of writing to sites-enabled as it allows for easy disabling and re-enabling of a site without deletion
 - /srv/www/student/index.txt contains 908136
 - default_server is the static site, the IP and stu-908136-vm1.net.dcs.hull.ac.uk site serve it
 
 ## Docker
 - Docker installed from apt repository
 - SDI docker repository cloned, built and named sdi-img
-- The container sdi-container runs on a user defined bridge sdi-network 172.24.0.0/24 at a fixed IP 172.24.0.8 with restart policy --restart unless-stopped. Fixed IP lets Nginx find it more reliably
+- The container sdi-container runs on a user defined bridge sdi-network 172.24.0.0/24 at a fixed IP 172.24.0.8 with restart policy --restart unless-stopped (automatically starts container). Fixed IP lets Nginx know where to forwards a request every time.
 - Ports not published (p 3000:3000) so UFW cannot be bypassed. 
 - Nginx proxies docker.stu-908136-vm1.net.dcs.hull.ac.uk to 172.24.0.8:3000
 
   
-# Maintenance 
+# Maintenance tasks
 - Run sudo apt update, then sudo apt upgrade monthly to ensure security
 - Disk space management: use df -h, and sudo docker image prune to remove dangling images
 - Logs: use journalctl -u nginx, look into /var/log/nginx /var/log/auth.log, and use sudo docker logs sdi-container
