@@ -31,7 +31,7 @@ Documentation of installation and configuration of a server hosted on a VM
 ## Directories & permissions:
 - `/srv/www`, `/home/design`, and `/home/marketing`: `chmod 2750` used. The Setgid ensures every new file inherits the directory's group allowing audit and Nginx to read files.
 
-- `/home/audit`: chmod 750 used, only (`audit`) and the users in the same group access it
+- `/home/audit`: chmod 750 used, only (`audit`) and the users in `audit` group access it
 
 ## Firewall
 - UFW is enabled and only 22/tcp and 80/tcp are allowed through the firewall (VM security measure)
