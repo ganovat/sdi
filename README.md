@@ -18,17 +18,15 @@ Documentation of installation and configuration of a server hosted on a VM
 
 - audit: read-only SFTP access to marketing and design homes and website
   
-
-
 - www-data is a system user which is created by nginx which is part of the group webdata
 
 
 ## Groups
-- webdata: has audit, www-data (produced by Nginx). reads /srv/www
+- webdata: has audit, www-data . reads /srv/www
 
 - sftpMember: has audit and marketing. Forced into SFTP-only
 
-- readHome- is the group owner of marketing and design home directories so it can read them. Created to enforce least privilege principle and allow scalability without changing home ownership
+- readHome- is the group owner of marketing and design home directories so it can read them. Enforces least privilege principle and allows scalability without changing home ownership
 
 ## Directories & permissions:
 - For the directories /srv/www, /home/design, and /home/marketing: the chmod 2750 command was used. The Setgid ensures every new file inherits the directory's group allowing audit and Nginx to read files.
@@ -46,8 +44,8 @@ Documentation of installation and configuration of a server hosted on a VM
 - Nginx listens on port 80
 - root directory set to /srv/www
 - The Nginx configuration file at /etc/nginx/sites-available/staticSite and it is symlinked into /etc/nginx/sites-enabled/staticSite
-- sites-available and Symlinks used instead of writing to sites-enabled as it makes maintainability easier (disable site without deleting)
-- /srv/www/student/index.txt contain 908136
+- sites-available and Symlinks used instead of writing to sites-enabled as it allows for easy disabling and re-enabling a site without deletion
+- /srv/www/student/index.txt contains 908136
 - default_server is the static site, the IP and stu-908136-vm1.net.dcs.hull.ac.uk site serve it
 
 ## Docker
@@ -58,7 +56,7 @@ Documentation of installation and configuration of a server hosted on a VM
 - Nginx proxies docker.stu-908136-vm1.net.dcs.hull.ac.uk to 172.24.0.8:3000
 
   
-# Maintenance tasks
+# Maintenance 
 - Run sudo apt update, then sudo apt upgrade monthly to ensure security
 - Disk space management: use df -h, and sudo docker image prune to remove dangling images
 - Logs: use journalctl -u nginx, look into /var/log/nginx /var/log/auth.log, and use sudo docker logs sdi-container
@@ -69,4 +67,4 @@ Documentation of installation and configuration of a server hosted on a VM
 
 
 # AI use
-AI was used to explain error messages 
+AI was used to explain error messages, configuration was done by me
